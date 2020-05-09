@@ -66,7 +66,7 @@ class RegisterFragment : Fragment() {
         if (password.equals(passwordConfirm)){
             val userRequest = UserRequest(email,password,firstName,lastName)
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://localhost:8080")
+                .baseUrl("http://ec2-18-224-64-139.us-east-2.compute.amazonaws.com:8080")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 

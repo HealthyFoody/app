@@ -7,7 +7,7 @@
     tools:context=".loginregister.LoginFragment">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/edit_text_email_login"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -17,7 +17,7 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_password_login"
         android:hint = "Password"/>
 
     <Button
@@ -30,7 +30,7 @@
         android:text="Iniciar sesión"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_email_login" />
 
     <Button
         android:id="@+id/btn_register"
@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/edit_text_password_login"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
