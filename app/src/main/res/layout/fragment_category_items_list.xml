@@ -8,7 +8,7 @@ android:orientation="vertical"
     >
 
 <TextView
-    android:id="@+id/txt_title"
+    android:id="@+id/txt_title_product_items"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="CATEGORIA"
@@ -29,7 +29,7 @@ android:orientation="vertical"
     app:layoutManager="LinearLayoutManager"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    tools:context=".CategoryItemsFragment"
+    tools:context=".catalog.CategoryItemsFragment"
     tools:listitem="@layout/fragment_category_items" />
 
 </LinearLayout>

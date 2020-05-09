@@ -6,21 +6,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-
     <TextView
-        android:id="@+id/txtSubtitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/txt_title_cart"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="¿Qué quieres comer hoy?"
+        android:text="CARRITO"
+        android:textSize="32sp"
+        android:layout_marginTop="16dp"
         android:layout_gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_category_list"
-        android:name="com.healthyfoody.app.CategoryFragment"
+        android:id="@+id/rv_items_cart"
+        android:name="com.healthyfoody.app.cart.CartFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -28,8 +28,7 @@
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSubtitle"
-        tools:context=".catalog.CategoryFragment"
-        tools:listitem="@layout/fragment_category" />
+        tools:context=".cart.CartFragment"
+        tools:listitem="@layout/fragment_cart" />
 
 </LinearLayout>

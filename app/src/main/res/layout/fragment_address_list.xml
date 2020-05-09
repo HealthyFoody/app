@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_weight="0"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/txt_title_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DIRECCIONES"
+           android:layout_weight="4"
+            android:textSize="32sp"
+            android:layout_gravity="center_vertical"
+            />
+
+        <Button
+            android:id="@+id/btn_add_address_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:gravity="end"
+            android:text="Agregar"
+            android:textIsSelectable="false" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_weight="7"
+        android:id="@+id/rv_address_list"
+        android:name="com.healthyfoody.app.AddressFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:context=".address.AddressFragment"
+        tools:listitem="@layout/fragment_address" />
+
+</LinearLayout>

@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">HealthyFoody</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <string name="title_address">Direcciones</string>
+    <string name="title_cart">Carrito</string>
+    <string name="title_catalog">Menú</string>
+
     <string name="title_activity_address">Map</string>
     <string name="title_activity_login_register">LoginRegisterActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -13,4 +15,5 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_google_maps">Map</string>
 </resources>

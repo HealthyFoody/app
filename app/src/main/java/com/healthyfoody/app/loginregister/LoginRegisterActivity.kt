@@ -1,10 +1,8 @@
-package com.healthyfoody.app
+package com.healthyfoody.app.loginregister
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-
-import kotlinx.android.synthetic.main.activity_login_register.*
+import com.healthyfoody.app.R
 
 class LoginRegisterActivity : AppCompatActivity() {
 

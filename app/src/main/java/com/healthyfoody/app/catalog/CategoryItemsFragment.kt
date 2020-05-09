@@ -1,4 +1,4 @@
-package com.healthyfoody.app
+package com.healthyfoody.app.catalog
 
 import android.content.Context
 import android.os.Bundle
@@ -11,10 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import com.healthyfoody.app.R
 
 import com.healthyfoody.app.dummy.DummyContent
 import com.healthyfoody.app.dummy.DummyContent.DummyItem
-import kotlinx.android.synthetic.main.fragment_category_items_list.*
 import kotlinx.android.synthetic.main.fragment_category_items_list.view.*
 
 class CategoryItemsFragment : Fragment() {
@@ -41,12 +41,12 @@ class CategoryItemsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_category_items_list, container, false)
 
         // inicializar componentes
-        txtTitle = view.findViewById(R.id.txt_title)
+        txtTitle = view.findViewById(R.id.txt_title_product_items)
 
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
-            txtTitle!!.setText(arguments!!.getString("title"))
-            Toast.makeText(container!!.context,arguments!!.getString("title"),Toast.LENGTH_LONG).show()
+            txtTitle!!.setText(requireArguments().getString("title"))
+            Toast.makeText(container!!.context,requireArguments().getString("title"),Toast.LENGTH_LONG).show()
         }
 
 
@@ -57,7 +57,11 @@ class CategoryItemsFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = CategoryItemsRecyclerViewAdapter(DummyContent.ITEMS, listener)
+                adapter =
+                    CategoryItemsRecyclerViewAdapter(
+                        DummyContent.ITEMS,
+                        listener
+                    )
             }
         }
         return view

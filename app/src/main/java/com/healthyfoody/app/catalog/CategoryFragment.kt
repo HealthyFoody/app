@@ -1,4 +1,4 @@
-package com.healthyfoody.app
+package com.healthyfoody.app.catalog
 
 import android.content.Context
 import android.os.Bundle
@@ -9,15 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.healthyfoody.app.R
 
 import com.healthyfoody.app.models.Category
-import kotlinx.android.synthetic.main.fragment_category_list.view.*
+import com.healthyfoody.app.services.CategoryService
 
 class CategoryFragment : Fragment() {
 
     // TODO: Customize parameters
     private var columnCount = 2
-    private var serviceCategory = ServiceCategory()
+    private var serviceCategory = CategoryService()
     private var listener: OnListFragmentInteractionListener? = null
     private var listCategory : List<Category> ?= null
     private var recyclerView : RecyclerView ?= null
@@ -44,7 +45,12 @@ class CategoryFragment : Fragment() {
                    columnCount <= 1 -> LinearLayoutManager(context)
                    else -> GridLayoutManager(context, columnCount)
                }
-               adapter = CategoryRecyclerViewAdapter(serviceCategory.findAll(), listener)
+               adapter =
+                   CategoryRecyclerViewAdapter(
+                       listCategory!!,
+                       listener,
+                       context
+                   )
            }
         //recyclerView!!.adapter!!.notifyDataSetChanged()
 
