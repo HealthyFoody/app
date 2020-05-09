@@ -2,26 +2,54 @@ package com.healthyfoody.app.catalog
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.healthyfoody.app.R
-
 import com.healthyfoody.app.models.Category
 import com.healthyfoody.app.services.CategoryService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class CategoryFragment : Fragment() {
 
     // TODO: Customize parameters
     private var columnCount = 2
-    private var serviceCategory = CategoryService()
+    private lateinit var serviceCategory: CategoryService
     private var listener: OnListFragmentInteractionListener? = null
     private var listCategory : List<Category> ?= null
     private var recyclerView : RecyclerView ?= null
+
+    private var retrofit = Retrofit.Builder()
+        .baseUrl("https://localhost:8080")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    fun loadCategories() {
+
+        serviceCategory = retrofit.create(CategoryService::class.java)
+        serviceCategory.findAll().enqueue(object : Callback<List<Category>> {
+            override fun onFailure(call: Call<List<Category>>, t: Throwable) {
+                Log.d("jokeActivity", t.toString())
+            }
+
+            override fun onResponse(
+                call: Call<List<Category>>,
+                response: Response<List<Category>>
+            ) {
+                listCategory = response.body()
+            }
+
+        })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +63,9 @@ class CategoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         val view = inflater.inflate(R.layout.fragment_category_list, container, false)
-        listCategory = serviceCategory.findAll()
         recyclerView = view.findViewById(R.id.rv_category_list)
 
         // Set the adapter
