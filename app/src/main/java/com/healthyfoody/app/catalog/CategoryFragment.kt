@@ -30,7 +30,7 @@ class CategoryFragment : Fragment() {
 
     private fun loadCategories() {
 
-        var retrofit = Retrofit.Builder()
+        val retrofit = Retrofit.Builder()
             .baseUrl("https://localhost:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -39,7 +39,7 @@ class CategoryFragment : Fragment() {
         serviceCategory.findAll().enqueue(object : Callback<List<Category>> {
             override fun onFailure(call: Call<List<Category>>, t: Throwable) {
                 Log.d("jokeActivity", t.toString())
-                listCategory = listOf();
+
             }
 
             override fun onResponse(
@@ -48,7 +48,6 @@ class CategoryFragment : Fragment() {
             ) {
                 listCategory = response.body()
             }
-
         })
     }
 
@@ -64,6 +63,7 @@ class CategoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        listCategory =listOf()
 
         loadCategories()
 
