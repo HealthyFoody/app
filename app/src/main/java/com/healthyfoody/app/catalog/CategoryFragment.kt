@@ -28,17 +28,18 @@ class CategoryFragment : Fragment() {
     private var listCategory : List<Category> ?= null
     private var recyclerView : RecyclerView ?= null
 
-    private var retrofit = Retrofit.Builder()
-        .baseUrl("https://localhost:8080")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private fun loadCategories() {
 
-    fun loadCategories() {
+        var retrofit = Retrofit.Builder()
+            .baseUrl("https://localhost:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
         serviceCategory = retrofit.create(CategoryService::class.java)
         serviceCategory.findAll().enqueue(object : Callback<List<Category>> {
             override fun onFailure(call: Call<List<Category>>, t: Throwable) {
                 Log.d("jokeActivity", t.toString())
+                listCategory = listOf();
             }
 
             override fun onResponse(
@@ -64,6 +65,7 @@ class CategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        loadCategories()
 
         val view = inflater.inflate(R.layout.fragment_category_list, container, false)
         recyclerView = view.findViewById(R.id.rv_category_list)
