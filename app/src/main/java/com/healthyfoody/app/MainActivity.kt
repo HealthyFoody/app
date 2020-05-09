@@ -44,8 +44,14 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
         categoryItemsFragment = CategoryItemsFragment()
         cartFragment = CartFragment()
         addressFragment = AddressFragment()
-
         var mainBundle = this.intent.extras
+        if (mainBundle != null){
+            Toast.makeText(this,mainBundle.getString("userId"),Toast.LENGTH_LONG).show()
+        }
+        if(savedInstanceState != null){
+            Toast.makeText(this,savedInstanceState.getString("userId"),Toast.LENGTH_LONG).show()
+        }
+
         if(selectedFragment == null)
             supportFragmentManager.beginTransaction().replace(R.id.main_frame, categoryFragment!!).commit() // fragment default
         else
