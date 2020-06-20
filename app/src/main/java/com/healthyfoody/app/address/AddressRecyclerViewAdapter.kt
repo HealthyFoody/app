@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.healthyfoody.app.R
 
@@ -14,11 +15,7 @@ import com.healthyfoody.app.models.Address
 
 import kotlinx.android.synthetic.main.fragment_address.view.*
 
-/**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
- * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
- */
+
 class AddressRecyclerViewAdapter(
     private val mValues: List<Address>,
     private val mListener: OnListFragmentInteractionListener?
@@ -32,18 +29,21 @@ class AddressRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.lat.toString()
-        holder.mContentView.text = item.lng.toString()
+        holder.txtName.text = item.name
+        holder.txtFullAddress.text = item.fullAddress
+        holder.imgDeleteIcon.setOnClickListener {
+            mListener?.onListFragmentInteraction(item)
+        }
     }
 
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.item_number
-        val mContentView: TextView = mView.content
-
+        val txtName: TextView = mView.address_name_list
+        val txtFullAddress: TextView = mView.address_full_address_list
+        val imgDeleteIcon : ImageView = mView.image_delete_address
         override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
+            return super.toString() + " '" + txtFullAddress.text + "'"
         }
     }
 }

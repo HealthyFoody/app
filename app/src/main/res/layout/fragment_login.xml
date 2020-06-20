@@ -7,18 +7,19 @@
     tools:context=".loginregister.LoginFragment">
 
     <EditText
-        android:id="@+id/edit_text_email_login"
+        android:id="@+id/edit_text_password_login"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:ems="10"
+        android:hint="@string/hint_password_login"
         android:inputType="textPassword"
+        android:textColor="@android:color/primary_text_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_password_login"
-        android:hint = "Password"/>
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_email_login" />
 
     <Button
         android:id="@+id/btn_login"
@@ -27,10 +28,13 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
-        android:text="Iniciar sesión"
+        android:background="#E28BC34A"
+        android:fontFamily="@font/roboto_black"
+        android:text="@string/txt_button_login"
+        android:textColor="@android:color/tab_indicator_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_email_login" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_password_login" />
 
     <Button
         android:id="@+id/btn_register"
@@ -39,22 +43,26 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Registrarse"
+        android:background="#488BC34A"
+        android:fontFamily="@font/roboto_black"
+        android:text="@string/txt_button_register_login"
+        android:textColor="@android:color/tab_indicator_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.526"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
     <EditText
-        android:id="@+id/edit_text_password_login"
+        android:id="@+id/edit_text_email_login"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
         android:ems="10"
-        android:hint="Email"
+        android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
+        android:textColor="@android:color/primary_text_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -66,8 +74,10 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Inicio de Sesión"
+        android:fontFamily="@font/roboto"
+        android:text="@string/txt_title_login"
         android:textAlignment="center"
+        android:textColor="#43A047"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

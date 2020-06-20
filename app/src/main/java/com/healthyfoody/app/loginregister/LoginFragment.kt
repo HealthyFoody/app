@@ -15,7 +15,6 @@ import com.healthyfoody.app.MainActivity
 import com.healthyfoody.app.R
 import com.healthyfoody.app.models.Token
 import com.healthyfoody.app.models.UserRequest
-import com.healthyfoody.app.models.UserResponse
 import com.healthyfoody.app.services.UserService
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import retrofit2.Call
@@ -30,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class LoginFragment : Fragment() {
     private lateinit var editTextEmail : EditText
     private lateinit var editTextPassword : EditText
-
+    private lateinit var viewGroup : ViewGroup
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,11 +37,12 @@ class LoginFragment : Fragment() {
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_login, container, false)
+        viewGroup = container!!
         editTextEmail = view.edit_text_email_login
         editTextPassword = view.edit_text_password_login
 
         view.findViewById<Button>(R.id.btn_login).setOnClickListener {
-            login(container!!)
+            login()
 
         }
         view.findViewById<Button>(R.id.btn_register).setOnClickListener {
@@ -50,13 +50,13 @@ class LoginFragment : Fragment() {
         }
         return view
     }
-    fun login(viewGroup:ViewGroup) {
+    fun login() {
         val email = editTextEmail.text.toString()
         val password = editTextPassword.text.toString()
 
         val user = UserRequest(email,password,"","")
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://ec2-18-224-64-139.us-east-2.compute.amazonaws.com:8080")
+            .baseUrl("http://192.168.1.62:8080")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -78,7 +78,7 @@ class LoginFragment : Fragment() {
                     mainActivity.putExtra("token",response.body()!!.token)
                     startActivity(mainActivity)
                 }else{
-                    Toast.makeText(viewGroup.context,"q fue " + response.toString(), Toast.LENGTH_LONG).show()
+                    Log.e("Login",response.toString())
                 }
             }
         })

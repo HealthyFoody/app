@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,11 +15,20 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.healthyfoody.app.R
+import com.healthyfoody.app.common.CONSTANTS
+import com.healthyfoody.app.common.SharedPreferences
 
 import com.healthyfoody.app.models.Address
+import com.healthyfoody.app.models.MainUserValues
 import com.healthyfoody.app.services.AddressService
 import kotlinx.android.synthetic.main.fragment_address_list.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class AddressFragment : Fragment() {
@@ -26,13 +36,16 @@ class AddressFragment : Fragment() {
     // TODO: Customize parameters
     private var REQUEST_ADD_CODE : Int = 1
     private var columnCount = 1
-    private var addressService = AddressService()
-    private lateinit var listAdresss : List<Address>
+    private lateinit var addressService : AddressService
+    private var listAdresses : List<Address> = listOf()
     private var listener: OnListFragmentInteractionListener? = null
     private lateinit var btnAddAddress : Button
     private lateinit var txtTitle : TextView
     private lateinit var viewGroup : ViewGroup
     private lateinit var recyclerView : RecyclerView
+    private var gson = Gson()
+    private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var mainInfo : MainUserValues
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +60,18 @@ class AddressFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_address_list, container, false)
-        listAdresss = addressService.findAll()
+        recyclerView = view.findViewById(R.id.rv_address_list)
+        initAddressService()
+        sharedPreferences = SharedPreferences(container!!.context)
+        viewGroup = container!!
+        mainInfo = gson.fromJson(sharedPreferences.getValue(CONSTANTS.MAIN_INFO),MainUserValues::class.java)
+        Log.d("TOKEN INFO",sharedPreferences.getValue(CONSTANTS.MAIN_INFO))
+        reloadAddresses()
+
         btnAddAddress = view.findViewById(R.id.btn_add_address_activity)
         txtTitle = view.findViewById(R.id.txt_title_address)
         viewGroup = container!!
-        recyclerView = view.findViewById(R.id.rv_address_list)
+
         btnAddAddress.setOnClickListener{
             openAddAddressActivity(viewGroup)
         }
@@ -61,7 +81,7 @@ class AddressFragment : Fragment() {
                 else -> GridLayoutManager(context, columnCount)
             }
             adapter = AddressRecyclerViewAdapter(
-                listAdresss,
+                listAdresses,
                 listener
             )
         }
@@ -89,23 +109,68 @@ class AddressFragment : Fragment() {
         listener = null
     }
 
+    fun initAddressService(){
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://192.168.1.62:8080")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        addressService = retrofit.create(AddressService::class.java)
+    }
+    fun deleteAddress(address: Address){
+        addressService.deleteAddressById("application/json",mainInfo.token!!,address.id).enqueue(object : Callback<Void>{
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(viewGroup.context,"Error",Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(
+                call: Call<Void>,
+                response: Response<Void>
+            ) {
+                if (response.isSuccessful) {
+                   reloadAddresses()
+                }else{
+                    Log.d("ADDRESS NOT SUCCESSFUL",gson.toJson(response.code()))
+                    Toast.makeText(viewGroup.context,"ERROR?",Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+    }
+    fun reloadAddresses(){
+        addressService.findAddressesByIdCustomer("application/json",mainInfo.token!!,mainInfo.customerId!!).enqueue(object : Callback<List<Address>> {
+            override fun onFailure(call: Call<List<Address>>, t: Throwable) {
+                Log.d("ERROR CATEGORIA F",t.toString())
+                Toast.makeText(viewGroup.context,"Error",Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(
+                call: Call<List<Address>>,
+                response: Response<List<Address>>
+            ) {
+                if (response.isSuccessful) {
+                    //Toast.makeText(viewGroup.context,"SATISFACTORIO??",Toast.LENGTH_LONG).show()
+                    listAdresses = response.body()!!
+                    Log.d("LISTA ADDRESS",gson.toJson(listAdresses))
+                    with(recyclerView) {
+                        adapter =
+                            AddressRecyclerViewAdapter(
+                                listAdresses,
+                                listener
+                            )
+                        adapter!!.notifyDataSetChanged()
+                    }
+                }else{
+                    Log.d("ADDRESS NOT SUCCESSFUL",gson.toJson(response.code()))
+                    Toast.makeText(viewGroup.context,"ERROR?",Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == REQUEST_ADD_CODE){
             if(resultCode == Activity.RESULT_OK){
-                Toast.makeText(viewGroup.context,"LLEGUE JEJE",Toast.LENGTH_LONG).show()
-                listOf(Address(12.00f, 13.0f)).also {
-                    listAdresss = it.toList()
-                }
-                with(recyclerView) {
-                    adapter =
-                        AddressRecyclerViewAdapter(
-                            listAdresss,
-                            listener
-                        )
-                    adapter!!.notifyDataSetChanged()
-                }
-
-
+                //Toast.makeText(viewGroup.context,"LLEGUE JEJE",Toast.LENGTH_LONG).show()
+                reloadAddresses()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -123,7 +188,6 @@ class AddressFragment : Fragment() {
      * for more information.
      */
     interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onListFragmentInteraction(item: Address?)
     }
 
@@ -132,7 +196,6 @@ class AddressFragment : Fragment() {
         // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
 
-        // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
             AddressFragment().apply {

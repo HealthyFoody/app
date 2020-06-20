@@ -12,12 +12,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".address.GoogleMapsActivity" />
+    <EditText
+        android:id="@+id/txt_name_address"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="24dp"
+        android:hint="Ingrese apodo de esta ubicación">
+
+    </EditText>
     <Button
         android:id="@+id/btn_add_address"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_margin="8dp"
         android:text="Agregar Dirección"
         android:layout_gravity="center"
+        android:background="#E28BC34A"
+        android:textColor="@android:color/tab_indicator_text"
+        android:fontFamily="@font/roboto_black"
         ></Button>
 </LinearLayout>

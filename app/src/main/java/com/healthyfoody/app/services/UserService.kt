@@ -11,7 +11,7 @@ import retrofit2.http.POST
 
 interface UserService {
     @POST("/users/register")
-    fun registerUser(@Header("Content-Type") contentType : String,@Body userRequest: UserRequest): Call<UserResponse>
+    fun registerUser(@Header("Content-Type") contentType : String,@Body userRequest: UserRequest): Call<Void>
 
     @POST("/users/login")
     fun loginUser(@Header("Content-Type") contentType : String,@Body userRequest : UserRequest) :Call<Token>

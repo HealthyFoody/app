@@ -6,12 +6,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.healthyfoody.app.R
+import com.healthyfoody.app.common.CONSTANTS
+import com.healthyfoody.app.common.SharedPreferences
 import com.healthyfoody.app.models.Category
+import com.healthyfoody.app.models.MainUserValues
 import com.healthyfoody.app.services.CategoryService
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,28 +30,49 @@ class CategoryFragment : Fragment() {
     private var columnCount = 2
     private lateinit var serviceCategory: CategoryService
     private var listener: OnListFragmentInteractionListener? = null
-    private var listCategory : List<Category> ?= null
+    private var listCategory : List<Category> = listOf()
     private var recyclerView : RecyclerView ?= null
+    private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var mainInfo : MainUserValues
+    private lateinit var viewGroup: ViewGroup
+    private var gson = Gson()
+
 
     private fun loadCategories() {
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://localhost:8080/")
+            .baseUrl("http://192.168.1.62:8080")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         serviceCategory = retrofit.create(CategoryService::class.java)
-        serviceCategory.findAll().enqueue(object : Callback<List<Category>> {
+        serviceCategory.findAll("application/json",mainInfo.token!!).enqueue(object : Callback<List<Category>> {
             override fun onFailure(call: Call<List<Category>>, t: Throwable) {
-                Log.d("jokeActivity", t.toString())
-
+                Log.d("CATEGORIA",gson.toJson(mainInfo))
+                Log.d("ERROR CATEGORIA F",t.toString())
+                Toast.makeText(viewGroup.context,"Error",Toast.LENGTH_LONG).show()
             }
 
             override fun onResponse(
                 call: Call<List<Category>>,
                 response: Response<List<Category>>
             ) {
-                listCategory = response.body()
+                if (response.isSuccessful) {
+                    //Toast.makeText(viewGroup.context,"SATISFACTORIO??",Toast.LENGTH_LONG).show()
+
+                    listCategory = response.body()!!
+                    Log.d("LISTA CATEGORIA",gson.toJson(listCategory))
+                    recyclerView!!.adapter =   CategoryRecyclerViewAdapter(
+                        listCategory,
+                        listener,
+                        viewGroup.context
+                    )
+                    recyclerView!!.adapter!!.notifyDataSetChanged()
+
+                }else{
+                    Log.d("CATEGORIA",gson.toJson(mainInfo))
+                    //Toast.makeText(viewGroup.context,response.toString(),Toast.LENGTH_LONG).show()
+                }
             }
         })
     }
@@ -63,8 +89,9 @@ class CategoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        listCategory =listOf()
-
+        sharedPreferences = SharedPreferences(container!!.context)
+        viewGroup = container
+        mainInfo = gson.fromJson(sharedPreferences.getValue(CONSTANTS.MAIN_INFO),MainUserValues::class.java)
         loadCategories()
 
         val view = inflater.inflate(R.layout.fragment_category_list, container, false)
@@ -78,7 +105,7 @@ class CategoryFragment : Fragment() {
                }
                adapter =
                    CategoryRecyclerViewAdapter(
-                       listCategory!!,
+                       listCategory,
                        listener,
                        context
                    )

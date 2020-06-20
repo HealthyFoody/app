@@ -5,9 +5,14 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -15,7 +20,19 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.gson.Gson
 import com.healthyfoody.app.R
+import com.healthyfoody.app.common.CONSTANTS
+import com.healthyfoody.app.common.SharedPreferences
+import com.healthyfoody.app.models.Address
+import com.healthyfoody.app.models.MainUserValues
+import com.healthyfoody.app.services.AddressService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
 
 class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -24,19 +41,64 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var myLocation : LatLng = LatLng(-12.077470,-77.081976)
     private var zoom : Float = 12.0F
     private lateinit var btnAddAddress : Button
+    private lateinit var addressService : AddressService
+    private var gson = Gson()
+    private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var mainInfo : MainUserValues
+    private lateinit var txtName : EditText
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_google_maps)
+        sharedPreferences = SharedPreferences(this)
+        mainInfo = gson.fromJson(sharedPreferences.getValue(CONSTANTS.MAIN_INFO), MainUserValues::class.java)
+        btnAddAddress = findViewById(R.id.btn_add_address)
+        txtName = findViewById(R.id.txt_name_address)
+        btnAddAddress.setOnClickListener {
+            val textName = txtName.text.toString()
+            val fullAddress = "Dirección de prueba"
+            if(textName == ""){
+                Toast.makeText(this,"Por favor llene el campo de apodo",Toast.LENGTH_SHORT).show()
+            }else{
 
-        btnAddAddress = findViewById<Button>(R.id.btn_add_address)
-        btnAddAddress?.setOnClickListener {
-            var data =  Intent()
-            var text = "Result to be returned...."
-            //---set the data to pass back---
-            data.setData(Uri.parse(text));
-            setResult(RESULT_OK, data);
-            //---close the activity---
-            finish();
+                val address = Address(myLocation.latitude.toFloat(),myLocation.longitude.toFloat(),textName,fullAddress,false,"",mainInfo.customerId!!)
+
+                Log.d("DIRECCION ENVIADA",gson.toJson(address))
+
+                val retrofit = Retrofit.Builder()
+                    .baseUrl("http://192.168.1.62:8080")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                addressService = retrofit.create(AddressService::class.java)
+
+                addressService.addAddress("application/json",mainInfo.token!!,address).enqueue(object :
+                    Callback<Address> {
+                    override fun onFailure(call: Call<Address>, t: Throwable) {
+
+                    }
+
+                    override fun onResponse(
+                        call: Call<Address>,
+                        response: Response<Address>
+                    ) {
+                        if (response.isSuccessful) {
+                            val data =  Intent()
+                            val text = "Result to be returned...."
+                            //---set the data to pass back---
+                            data.setData(Uri.parse(text));
+                            setResult(RESULT_OK, data);
+                            //---close the activity---
+                            finish();
+                        }else{
+                            Log.d("ADDRESS NOT SUCCESSFUL",gson.toJson(response.code()))
+                        }
+                    }
+                })
+
+
+            }
+
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -90,11 +152,9 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
     fun changeLocation(latLong : LatLng){
-        if (latLong != null){
-            myLocation = latLong
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(myLocation))
-        }
+        myLocation = latLong
+        mMap.clear()
+        mMap.addMarker(MarkerOptions().position(myLocation))
     }
 
     private fun drawCircle(point: LatLng) {

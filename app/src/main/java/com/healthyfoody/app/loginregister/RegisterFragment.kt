@@ -66,25 +66,25 @@ class RegisterFragment : Fragment() {
         if (password.equals(passwordConfirm)){
             val userRequest = UserRequest(email,password,firstName,lastName)
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://ec2-18-224-64-139.us-east-2.compute.amazonaws.com:8080")
+                .baseUrl("http://192.168.1.62:8080")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
             val userService: UserService
             userService = retrofit.create(UserService::class.java)
             val request = userService.registerUser("application/json",userRequest)
-            request.enqueue(object : Callback<UserResponse> {
-                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+            request.enqueue(object : Callback<Void> {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
                     Toast.makeText(viewGroup.context,"Error",Toast.LENGTH_LONG).show()
                     Log.d("loginregisterActivity", t.toString())
                 }
 
-                override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful){
                         Toast.makeText(viewGroup.context,"Registro satisfactorio",Toast.LENGTH_LONG).show()
                         findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
                     }else{
-                        Toast.makeText(viewGroup.context,"q fue",Toast.LENGTH_LONG).show()
+                        Toast.makeText(viewGroup.context,"Error",Toast.LENGTH_LONG).show()
                     }
                 }
             })

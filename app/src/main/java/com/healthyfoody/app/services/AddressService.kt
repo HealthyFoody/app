@@ -1,11 +1,16 @@
 package com.healthyfoody.app.services
 
 import com.healthyfoody.app.models.Address
+import retrofit2.Call
+import retrofit2.http.*
 
-class AddressService {
-    val addresses : List<Address> = listOf(Address(12.00f,13.0f),Address(16.00f,14.0f),Address(11.00f,15.0f))
-    fun findAll():List<Address>{
-        return addresses
-    }
+interface AddressService {
+    @GET("/location/addresses")
+    fun findAddressesByIdCustomer(@Header("Content-Type") contentType : String, @Header("Authorization")token :String,@Query("customer") customerId:String):Call<List<Address>>
 
+    @DELETE("/location/addresses/{id}")
+    fun deleteAddressById(@Header("Content-Type") contentType : String, @Header("Authorization")token :String,@Path("id")id :String):Call<Void>
+
+    @POST("/location/addresses?default=false")
+    fun addAddress(@Header("Content-Type") contentType : String, @Header("Authorization")token :String,@Body address:Address):Call<Address>
 }
