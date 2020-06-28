@@ -14,10 +14,18 @@ import com.healthyfoody.app.R
 
 import com.healthyfoody.app.cart.dummy.DummyContent
 import com.healthyfoody.app.cart.dummy.DummyContent.DummyItem
+import com.healthyfoody.app.common.CONSTANTS
+import com.healthyfoody.app.common.SharedPreferences
 import com.healthyfoody.app.models.Cart
+import com.healthyfoody.app.models.CartMealItem
+import com.healthyfoody.app.models.MainUserValues
 import com.healthyfoody.app.services.CartService
+import com.healthyfoody.app.services.CategoryService
+import com.healthyfoody.app.services.ProductService
 import kotlinx.android.synthetic.main.fragment_address_list.view.*
 import kotlinx.android.synthetic.main.fragment_cart_list.view.*
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * A fragment representing a list of Items.
@@ -28,9 +36,16 @@ class CartFragment : Fragment() {
 
     // TODO: Customize parameters
     private var columnCount = 1
-    private var cartService : CartService = CartService()
+    private lateinit var cartService : CartService
     private var listener: OnListFragmentInteractionListener? = null
-    private lateinit var listCart : List<Cart>
+    private lateinit var cart : Cart
+    private lateinit var listCartMeals: List<CartMealItem>
+    private lateinit var borrarLista : List<Cart>
+    private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var mainInfo : MainUserValues
+    private lateinit var viewGroup: ViewGroup
+
+
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var txtTitle : TextView
@@ -48,21 +63,31 @@ class CartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_cart_list, container, false)
-
+        borrarLista = listOf()
         recyclerView = view.findViewById(R.id.rv_items_cart)
         txtTitle = view.txt_title_cart
 
-        listCart = cartService.findAll()
+
         // Set the adapter
         with(recyclerView) {
             layoutManager = when {
                     columnCount <= 1 -> LinearLayoutManager(context)
                 else -> GridLayoutManager(context, columnCount)
             }
-            adapter = CartRecyclerViewAdapter(listCart, listener)
+            adapter = CartRecyclerViewAdapter(borrarLista, listener)
         }
 
         return view
+    }
+
+    fun initServices(){
+        val retrofit = Retrofit.Builder()
+            .baseUrl(CONSTANTS.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+
+
     }
 
     override fun onAttach(context: Context) {

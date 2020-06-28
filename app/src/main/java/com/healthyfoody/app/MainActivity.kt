@@ -1,5 +1,6 @@
 package com.healthyfoody.app
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -16,11 +17,15 @@ import com.healthyfoody.app.catalog.CategoryItemsFragment
 import com.healthyfoody.app.common.CONSTANTS
 import com.healthyfoody.app.common.SharedPreferences
 import com.healthyfoody.app.dummy.DummyContent
-import com.healthyfoody.app.models.Address
-import com.healthyfoody.app.models.Cart
-import com.healthyfoody.app.models.Category
-import com.healthyfoody.app.models.MainUserValues
+import com.healthyfoody.app.models.*
+import com.healthyfoody.app.services.CartService
+import com.healthyfoody.app.services.UserService
 import com.healthyfoody.app.ui.notifications.NotificationsFragment
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentInteractionListener,
     CategoryItemsFragment.OnListFragmentInteractionListener,
@@ -31,6 +36,8 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
     private var cartFragment : CartFragment ?= null
     private var selectedFragment: Fragment ?= null
     private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var cartService :CartService
+    private lateinit var mainCart : Cart
     //temporales
     private var addressFragment : AddressFragment?=null
     private var notificationFragment : NotificationsFragment ?=null
@@ -38,7 +45,29 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
     private var mainFrame : FrameLayout ?=null
 
     private var bundleFragments : Bundle = Bundle()
+    fun init(mainUserValues: MainUserValues){
+        val retrofit = Retrofit.Builder()
+            .baseUrl(CONSTANTS.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        cartService = retrofit.create(CartService::class.java)
 
+        cartService.getCart("application/json",mainUserValues.token!!,mainUserValues.customerId!!).enqueue(object : Callback<Cart> {
+            override fun onFailure(call: Call<Cart>, t: Throwable) {
+                Log.e("CART_MAIN_ACTIVITY - FAILED : ", t.toString())
+            }
+
+            override fun onResponse(call: Call<Cart>, response: Response<Cart>) {
+                if (response.isSuccessful){
+                    mainCart = response.body()!!
+                    sharedPreferences.save(CONSTANTS.CART_ID,mainCart.id)
+                    Log.d("CART_ID : ",mainCart.id)
+                }else{
+                    Log.e("CART_MAIN_ACTIVITY",response.toString())
+                }
+            }
+        })
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -63,7 +92,10 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
                 //Toast.makeText(this,"TOKEN",Toast.LENGTH_LONG).show()
                 val gson = Gson()
                 val json = gson.fromJson(userInfo,MainUserValues::class.java)
-                json!!.token = "Bearer " + token
+
+
+                json.token = "Bearer " + token
+                init(json)
                 Log.d("TOKEN ",gson.toJson(json))
                 sharedPreferences.save(CONSTANTS.MAIN_INFO,gson.toJson(json))
             }
@@ -113,8 +145,9 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
         supportFragmentManager.beginTransaction().replace(R.id.main_frame, categoryItemsFragment!!).commit()
     }
 
-    override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
-
+    override fun onListFragmentInteraction(product: Product?) {
+        Log.d("product : ",product!!.id)
+        Log.d("product : ",product.name)
     }
 
     override fun onListFragmentInteraction(item: Address?) {

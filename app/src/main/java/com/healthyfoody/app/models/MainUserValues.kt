@@ -11,4 +11,6 @@ class MainUserValues {
     var email: String ?=null
     @SerializedName("customerId")
     var customerId:String ?=null
+    @SerializedName("cartId")
+    var cartId:String?=null
 }

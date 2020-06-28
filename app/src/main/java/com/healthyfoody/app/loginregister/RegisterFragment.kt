@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.UserRecoverableException
 import com.healthyfoody.app.R
+import com.healthyfoody.app.common.CONSTANTS
 import com.healthyfoody.app.models.UserRequest
 import com.healthyfoody.app.models.UserResponse
 import com.healthyfoody.app.services.UserService
@@ -66,7 +67,7 @@ class RegisterFragment : Fragment() {
         if (password.equals(passwordConfirm)){
             val userRequest = UserRequest(email,password,firstName,lastName)
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.1.62:8080")
+                .baseUrl(CONSTANTS.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 

@@ -1,5 +1,6 @@
 package com.healthyfoody.app.catalog
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -29,14 +30,18 @@ class CategoryItemsRecyclerViewAdapter(
         return ViewHolder(view)
     }
 
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mIdView.text = "S/." + item.price
         holder.mContentView.text = item.name
         val uri : String = "@drawable/"+item.imageUrl
-        var imageResource = context.resources.getIdentifier(uri,null,context.packageName)
+        val imageResource = context.resources.getIdentifier(uri,null,context.packageName)
 
         holder.mImageview.setImageDrawable( ResourcesCompat.getDrawable(context.resources,imageResource,null))
+        holder.mBtnAddItem.setOnClickListener {
+            mListener!!.onListFragmentInteraction(item)
+        }
     }
 
     override fun getItemCount(): Int = mValues.size
@@ -45,7 +50,7 @@ class CategoryItemsRecyclerViewAdapter(
         val mIdView: TextView = mView.price
         val mContentView: TextView = mView.content
         val mImageview: ImageView = mView.iv_product
-
+        val mBtnAddItem: ImageView = mView.btn_add_item_cart
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"
         }

@@ -111,7 +111,7 @@ class AddressFragment : Fragment() {
 
     fun initAddressService(){
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.62:8080")
+            .baseUrl(CONSTANTS.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         addressService = retrofit.create(AddressService::class.java)

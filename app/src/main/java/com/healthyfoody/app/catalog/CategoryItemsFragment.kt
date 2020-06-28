@@ -102,7 +102,7 @@ class CategoryItemsFragment : Fragment() {
     }
     fun loadProducts(){
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.62:8080")
+            .baseUrl(CONSTANTS.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -153,7 +153,7 @@ class CategoryItemsFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
+        fun onListFragmentInteraction(product: Product?)
     }
 
     companion object {

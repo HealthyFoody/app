@@ -1,10 +1,20 @@
 package com.healthyfoody.app.services
 
 import com.healthyfoody.app.models.Cart
+import com.healthyfoody.app.models.CartMealRequest
+import retrofit2.Call
+import retrofit2.http.*
 
-class CartService {
-    val cart : List<Cart> = listOf(Cart("1","Carrito Item 1"),Cart("2","Carrito Item 2"))
-    fun findAll():List<Cart>{
-        return cart
-    }
+interface CartService {
+    @GET("/cart/details")
+    fun getCart(@Header("Content-Type") contentType : String, @Header("Authorization")token :String,@Query("customer")customer:String):Call<Cart>
+
+    @POST("/cart/{id}/meal/")
+    fun addMealCart(@Header("Content-Type") contentType : String, @Header("Authorization")token :String,@Path("id")id:String,@Body request: CartMealRequest):Call<Void>
+
+    @DELETE("/cart/{id}/remove")
+    fun deleteItemFromCart(@Header("Content-Type") contentType : String, @Header("Authorization")token :String,@Path("id")id:String,@Body request: CartMealRequest):Call<Void>
+
+    @DELETE("/cart/{id}/clear")
+    fun clearCart(@Header("Content-Type") contentType : String, @Header("Authorization")token :String,@Path("id")id:String):Call<Void>
 }

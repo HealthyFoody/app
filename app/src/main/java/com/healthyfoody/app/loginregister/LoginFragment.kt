@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.healthyfoody.app.MainActivity
 import com.healthyfoody.app.R
+import com.healthyfoody.app.common.CONSTANTS
 import com.healthyfoody.app.models.Token
 import com.healthyfoody.app.models.UserRequest
 import com.healthyfoody.app.services.UserService
@@ -56,7 +57,7 @@ class LoginFragment : Fragment() {
 
         val user = UserRequest(email,password,"","")
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.62:8080")
+            .baseUrl(CONSTANTS.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

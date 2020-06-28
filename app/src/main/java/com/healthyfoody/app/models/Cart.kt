@@ -1,6 +1,10 @@
 package com.healthyfoody.app.models
 
+import com.google.gson.annotations.SerializedName
+
 class Cart(
-    var id :String,
-    var name : String
+    @SerializedName("id")val id :String,
+    @SerializedName("customerId")val customerId : String,
+    @SerializedName("meals")val meals: List<CartMealItem>,
+    @SerializedName("totalPrice")val totalPrice: Float
 )
