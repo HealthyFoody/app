@@ -10,5 +10,13 @@ class Product(
     @SerializedName("imageUrl")
     val imageUrl : String,
     @SerializedName("price")
-    var price : String
+    var price : String,
+    @SerializedName("description")
+    var description:String,
+    @SerializedName("calories")
+    var calories:String,
+    @SerializedName("ingredients")
+    var ingredients : List<String>,
+    @SerializedName("type")
+    var type :String
 )

@@ -25,8 +25,10 @@ import com.healthyfoody.app.R
 import com.healthyfoody.app.common.CONSTANTS
 import com.healthyfoody.app.common.SharedPreferences
 import com.healthyfoody.app.models.Address
+import com.healthyfoody.app.models.GoogleMapsResponse
 import com.healthyfoody.app.models.MainUserValues
 import com.healthyfoody.app.services.AddressService
+import com.healthyfoody.app.services.GoogleMapsApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,13 +41,16 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private var myLocation : LatLng = LatLng(-12.077470,-77.081976)
-    private var zoom : Float = 12.0F
+    private var zoom : Float = 13.0F
     private lateinit var btnAddAddress : Button
     private lateinit var addressService : AddressService
     private var gson = Gson()
     private lateinit var sharedPreferences : SharedPreferences
     private lateinit var mainInfo : MainUserValues
     private lateinit var txtName : EditText
+    private lateinit var geocoder : Geocoder
+    private var fullAddress = "Dirección autodefinida"
+    private lateinit var gmapsService: GoogleMapsApiService
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,9 +60,18 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mainInfo = gson.fromJson(sharedPreferences.getValue(CONSTANTS.MAIN_INFO), MainUserValues::class.java)
         btnAddAddress = findViewById(R.id.btn_add_address)
         txtName = findViewById(R.id.txt_name_address)
+        geocoder = Geocoder(this,Locale.getDefault())
+
+        val retrofitMaps = Retrofit.Builder()
+            .baseUrl("https://maps.googleapis.com")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        gmapsService = retrofitMaps.create(GoogleMapsApiService::class.java)
+
+
+
         btnAddAddress.setOnClickListener {
             val textName = txtName.text.toString()
-            val fullAddress = "Dirección de prueba"
             if(textName == ""){
                 Toast.makeText(this,"Por favor llene el campo de apodo",Toast.LENGTH_SHORT).show()
             }else{
@@ -155,6 +169,33 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
         myLocation = latLong
         mMap.clear()
         mMap.addMarker(MarkerOptions().position(myLocation))
+        val strLatLng = latLong.latitude.toString() + ","+latLong.longitude.toString()
+
+        gmapsService.getAddress(strLatLng,getString(R.string.google_maps_key)).enqueue(object :
+            Callback<GoogleMapsResponse> {
+            override fun onFailure(call: Call<GoogleMapsResponse>, t: Throwable) {
+                Log.e("ADDRESS NOT FOUND",t.toString())
+            }
+
+            override fun onResponse(
+                call: Call<GoogleMapsResponse>,
+                response: Response<GoogleMapsResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val result = response.body()!!
+                    if(result.response.isNotEmpty()){
+                        fullAddress = result.response[0].formatter_address
+                        Log.d("UBICACION GOOGLE MAPS",result.response[0].formatter_address)
+                    }
+
+
+
+                }else{
+                    Log.d("ADDRESS NOT FOUND",gson.toJson(response.code()))
+                }
+            }
+        })
+        Log.d("LOCATION",latLong.toString())
     }
 
     private fun drawCircle(point: LatLng) {

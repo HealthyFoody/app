@@ -16,11 +16,12 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_google_maps">Map</string>
-    <string name="txt_category_title">¿Qué quieres comer hoy?</string>
+    <string name="txt_category_title">¿QUÉ QUIERES COMER HOY?</string>
     <string name="hint_password_login">Password</string>
-    <string name="txt_button_login">Iniciar sesión</string>
-    <string name="txt_button_register_login">Registrarse</string>
+    <string name="txt_button_login">Iniciar Sesión</string>
+    <string name="txt_button_register_login">REGISTRO</string>
     <string name="hint_email">Email</string>
-    <string name="txt_title_login">Inicio de Sesión</string>
+    <string name="txt_title_login">Healthy Foody</string>
     <string name="txt_button_register">Registrarse</string>
+    <string name="txt_loading">Cargando...</string>
 </resources>

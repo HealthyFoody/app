@@ -11,9 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.healthyfoody.app.address.AddressFragment
+import com.healthyfoody.app.address.GoogleMapsActivity
 import com.healthyfoody.app.cart.CartFragment
 import com.healthyfoody.app.catalog.CategoryFragment
 import com.healthyfoody.app.catalog.CategoryItemsFragment
+import com.healthyfoody.app.catalog.ProductDetailActivity
 import com.healthyfoody.app.common.CONSTANTS
 import com.healthyfoody.app.common.SharedPreferences
 import com.healthyfoody.app.dummy.DummyContent
@@ -80,6 +82,9 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
         categoryItemsFragment = CategoryItemsFragment()
         cartFragment = CartFragment()
         addressFragment = AddressFragment()
+
+
+
         var mainBundle = this.intent.extras
         if (mainBundle != null){
             val token = mainBundle.getString("token")
@@ -134,6 +139,15 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
         }
     }
 
+    override fun onBackPressed() {
+        when(selectedFragment!!::class.java){
+            CategoryItemsFragment::class.java ->{
+                selectedFragment = categoryFragment
+                supportFragmentManager.beginTransaction().replace(R.id.main_frame, selectedFragment!!).commit()
+            }
+        }
+    }
+
     override fun onListFragmentInteraction(item: Category?) {
         /*ejemplo para pasar parametros
         val args : Bundle = Bundle()
@@ -142,19 +156,30 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
         bundleFragments.putString("title",item!!.name)
         bundleFragments.putString("categoryId",item.id)
         categoryItemsFragment!!.arguments = bundleFragments
-        supportFragmentManager.beginTransaction().replace(R.id.main_frame, categoryItemsFragment!!).commit()
+        selectedFragment = categoryItemsFragment
+        supportFragmentManager.beginTransaction().replace(R.id.main_frame, selectedFragment!!).commit()
     }
 
     override fun onListFragmentInteraction(product: Product?) {
         Log.d("product : ",product!!.id)
         Log.d("product : ",product.name)
+
+        val productDetailIntent = Intent(this,ProductDetailActivity::class.java)
+        productDetailIntent.putExtra("productId",product.id)
+        startActivity(productDetailIntent)
+
     }
 
     override fun onListFragmentInteraction(item: Address?) {
         addressFragment!!.deleteAddress(item!!)
     }
 
-    override fun onListFragmentInteraction(item: Cart?) {
-        Toast.makeText(this,"Carrito ",Toast.LENGTH_LONG).show()
+    override fun onListFragmentInteraction(item: CartMealItem?,type:Number) {
+        Toast.makeText(this,"Carrito ${type}",Toast.LENGTH_LONG).show()
+        if(type == 1){
+            cartFragment!!.deleteItem(item!!)
+        }else if(type == 2){
+            cartFragment!!.editCartItem(item!!)
+        }
     }
 }

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import com.healthyfoody.app.R
 
@@ -33,13 +34,13 @@ class CategoryItemsRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = "S/." + item.price
+        holder.mIdView.text = "S/" + item.price
         holder.mContentView.text = item.name
         val uri : String = "@drawable/"+item.imageUrl
         val imageResource = context.resources.getIdentifier(uri,null,context.packageName)
 
         holder.mImageview.setImageDrawable( ResourcesCompat.getDrawable(context.resources,imageResource,null))
-        holder.mBtnAddItem.setOnClickListener {
+        holder.mCardView.setOnClickListener {
             mListener!!.onListFragmentInteraction(item)
         }
     }
@@ -51,6 +52,7 @@ class CategoryItemsRecyclerViewAdapter(
         val mContentView: TextView = mView.content
         val mImageview: ImageView = mView.iv_product
         val mBtnAddItem: ImageView = mView.btn_add_item_cart
+        val mCardView : CardView = mView.cardview_product
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"
         }

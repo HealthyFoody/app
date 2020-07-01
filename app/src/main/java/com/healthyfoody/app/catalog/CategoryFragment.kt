@@ -89,6 +89,7 @@ class CategoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         sharedPreferences = SharedPreferences(container!!.context)
         viewGroup = container
         mainInfo = gson.fromJson(sharedPreferences.getValue(CONSTANTS.MAIN_INFO),MainUserValues::class.java)
@@ -123,7 +124,6 @@ class CategoryFragment : Fragment() {
             throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
         }
     }
-
     override fun onDetach() {
         super.onDetach()
         listener = null

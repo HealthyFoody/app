@@ -1,58 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/txt_title_cart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:text="CARRITO"
-        android:textSize="32sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_items_cart"
-        android:name="com.healthyfoody.app.cart.CartFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_title_cart"
-        tools:context=".cart.CartFragment"
-        tools:listitem="@layout/fragment_cart" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_items_cart"
-        >
-
+        android:layout_height="match_parent"
+        android:layout_weight="9">
         <TextView
-            android:id="@+id/txt_total_price"
-            android:layout_width="0dp"
+            android:id="@+id/txt_title_cart"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:fontFamily="@font/roboto"
-            android:textSize="20sp"
-            android:text="Total : S/. 20.00"/>
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:textSize="32sp"
+            android:text="MI CARRITO"
+            android:fontFamily="@font/roboto_black"
+            android:textAllCaps="true"
+            android:textColor="#4CAF50"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_items_cart"
+            android:name="com.healthyfoody.app.cart.CartFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".cart.CartFragment"
+            tools:listitem="@layout/fragment_cart" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="8">
+        <Button
+            android:id="@+id/btn_continue_cart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="32dp"
+            android:textColor="@android:color/background_light"
+            android:background="#E28BC34A"
+            android:textSize="24sp"
+            android:text="Continuar S/0.00" />
+
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+</LinearLayout>

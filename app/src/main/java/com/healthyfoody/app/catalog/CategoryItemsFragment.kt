@@ -43,6 +43,7 @@ class CategoryItemsFragment : Fragment() {
     private lateinit var mainInfo : MainUserValues
     private lateinit var recyclerView : RecyclerView
     private var gson = Gson()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         /*

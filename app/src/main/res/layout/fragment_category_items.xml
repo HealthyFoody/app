@@ -12,7 +12,7 @@
         android:layout_height="100dp"
         android:layout_marginBottom="10dp"
         android:layout_gravity="center"
-        android:id="@+id/cardview_category">
+        android:id="@+id/cardview_product">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

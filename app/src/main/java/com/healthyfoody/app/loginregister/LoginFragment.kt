@@ -78,6 +78,7 @@ class LoginFragment : Fragment() {
                         MainActivity::class.java)
                     mainActivity.putExtra("token",response.body()!!.token)
                     startActivity(mainActivity)
+
                 }else{
                     Log.e("Login",response.toString())
                 }

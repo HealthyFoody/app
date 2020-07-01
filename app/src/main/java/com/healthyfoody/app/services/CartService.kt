@@ -12,8 +12,9 @@ interface CartService {
     @POST("/cart/{id}/meal/")
     fun addMealCart(@Header("Content-Type") contentType : String, @Header("Authorization")token :String,@Path("id")id:String,@Body request: CartMealRequest):Call<Void>
 
-    @DELETE("/cart/{id}/remove")
-    fun deleteItemFromCart(@Header("Content-Type") contentType : String, @Header("Authorization")token :String,@Path("id")id:String,@Body request: CartMealRequest):Call<Void>
+    @HTTP(method = "DELETE", path = "/cart/{id}/remove", hasBody = true)
+    fun deleteItemFromCart(@Header("Content-Type") contentType : String, @Header("Authorization")token :String,@Path("id")id:String,@Body request: CartMealRequest):Call<Cart>
+
 
     @DELETE("/cart/{id}/clear")
     fun clearCart(@Header("Content-Type") contentType : String, @Header("Authorization")token :String,@Path("id")id:String):Call<Void>
