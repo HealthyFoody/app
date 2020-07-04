@@ -31,14 +31,14 @@
             android:id="@+id/btn_add_address_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:layout_weight="0"
+            android:background="#E28BC34A"
+            android:fontFamily="@font/roboto_black"
             android:gravity="center"
             android:text="Agregar"
-            android:layout_margin="8dp"
-            android:background="#E28BC34A"
-            android:textColor="@android:color/tab_indicator_text"
-            android:textIsSelectable="false"
-            android:fontFamily="@font/roboto_black"/>
+            android:textColor="@android:color/white"
+            android:textIsSelectable="false" />
 
     </LinearLayout>
 

@@ -70,7 +70,7 @@ class ProductDetailActivity : AppCompatActivity() {
             if(it.containsKey("requestCode")){
                 requestCode = it.getString("requestCode")!!.toInt()
             }
-            Toast.makeText(this,productId, Toast.LENGTH_LONG).show()
+            //Toast.makeText(this,productId, Toast.LENGTH_LONG).show()
         }
         mainInfo = gson.fromJson(sharedPreferences.getValue(CONSTANTS.MAIN_INFO),MainUserValues::class.java)
         cartId = sharedPreferences.getValue(CONSTANTS.CART_ID)!!
@@ -113,7 +113,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<Product>, response: Response<Product>) {
                 if (response.isSuccessful){
-                    Toast.makeText(this@ProductDetailActivity,"Login satisfactorio", Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this@ProductDetailActivity,"Login satisfactorio", Toast.LENGTH_LONG).show()
                     val productTemp = response.body()!!
                     updateInfo(productTemp)
                     product = productTemp

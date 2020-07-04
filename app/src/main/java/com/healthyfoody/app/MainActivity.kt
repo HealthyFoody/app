@@ -110,9 +110,8 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
         }
 
         if(selectedFragment == null)
-            supportFragmentManager.beginTransaction().replace(R.id.main_frame, categoryFragment!!).commit() // fragment default
-        else
-            supportFragmentManager.beginTransaction().replace(R.id.main_frame, selectedFragment!!).commit()
+            selectedFragment = categoryFragment
+        supportFragmentManager.beginTransaction().replace(R.id.main_frame, selectedFragment!!).commit()
         /*
         * Agregar aqui todos los parametros que se le asignen de la siguiente forma :
         * var id = mainBundle!!.getInt("id")
@@ -145,6 +144,9 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
                 selectedFragment = categoryFragment
                 supportFragmentManager.beginTransaction().replace(R.id.main_frame, selectedFragment!!).commit()
             }
+            CategoryFragment::class.java->{
+                finish()
+            }
         }
     }
 
@@ -162,7 +164,6 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
 
     override fun onListFragmentInteraction(product: Product?) {
         Log.d("product : ",product!!.id)
-        Log.d("product : ",product.name)
 
         val productDetailIntent = Intent(this,ProductDetailActivity::class.java)
         productDetailIntent.putExtra("productId",product.id)
@@ -175,7 +176,7 @@ class MainActivity : AppCompatActivity() , CategoryFragment.OnListFragmentIntera
     }
 
     override fun onListFragmentInteraction(item: CartMealItem?,type:Number) {
-        Toast.makeText(this,"Carrito ${type}",Toast.LENGTH_LONG).show()
+        //Toast.makeText(this,"Carrito ${type}",Toast.LENGTH_LONG).show()
         if(type == 1){
             cartFragment!!.deleteItem(item!!)
         }else if(type == 2){

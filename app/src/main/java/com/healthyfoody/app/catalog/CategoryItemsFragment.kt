@@ -72,7 +72,7 @@ class CategoryItemsFragment : Fragment() {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
             txtTitle!!.setText(requireArguments().getString("title"))
             categoryId = requireArguments().getString("categoryId")!!
-            Toast.makeText(container!!.context,categoryId,Toast.LENGTH_LONG).show()
+            //Toast.makeText(container!!.context,categoryId,Toast.LENGTH_LONG).show()
         }
 
         loadProducts()

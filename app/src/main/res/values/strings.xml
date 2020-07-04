@@ -21,7 +21,12 @@
     <string name="txt_button_login">Iniciar Sesión</string>
     <string name="txt_button_register_login">REGISTRO</string>
     <string name="hint_email">Email</string>
-    <string name="txt_title_login">Healthy Foody</string>
+    <string name="txt_title_login">HEALTHY FOODY</string>
     <string name="txt_button_register">Registrarse</string>
     <string name="txt_loading">Cargando...</string>
+    <string name="agregar_direcci_n">Agregar Dirección</string>
+    <string name="hint_name_address">Ingrese apodo de esta ubicación</string>
+    <string name="hint_full_address">Seleccione una ubicación</string>
+    <string name="txt_title_register">Registro</string>
+    <string name="txt_has_account_question">¿Ya tienes cuenta? Inicia Sesión</string>
 </resources>

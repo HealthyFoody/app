@@ -40,8 +40,8 @@ import java.util.*
 class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-    private var myLocation : LatLng = LatLng(-12.077470,-77.081976)
-    private var zoom : Float = 13.0F
+    private var myLocation : LatLng = LatLng(-12.0771302,-77.0832421)
+    private var zoom : Float = 18F
     private lateinit var btnAddAddress : Button
     private lateinit var addressService : AddressService
     private var gson = Gson()
@@ -51,7 +51,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var geocoder : Geocoder
     private var fullAddress = "Dirección autodefinida"
     private lateinit var gmapsService: GoogleMapsApiService
-
+    private lateinit var editTxtFullAddress : EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +61,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
         btnAddAddress = findViewById(R.id.btn_add_address)
         txtName = findViewById(R.id.txt_name_address)
         geocoder = Geocoder(this,Locale.getDefault())
+        editTxtFullAddress = findViewById(R.id.txt_full_address)
 
         val retrofitMaps = Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com")
@@ -72,7 +73,9 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         btnAddAddress.setOnClickListener {
             val textName = txtName.text.toString()
-            if(textName == ""){
+            val textFullAddress = editTxtFullAddress.text.toString()
+
+            if(textName == "" || textFullAddress == ""){
                 Toast.makeText(this,"Por favor llene el campo de apodo",Toast.LENGTH_SHORT).show()
             }else{
 
@@ -136,11 +139,11 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
             changeLocation(it)
         }
         // Add a marker in Sydney and move the camera
-        mMap.addMarker(MarkerOptions().position(myLocation).title("Mi ubicación").icon(bitmapDescriptorFromVector(this,R.drawable.ic_store_black_24dp)))
+        mMap.addMarker(MarkerOptions().position(myLocation).title("Mi ubicación"))
         mMap.setMaxZoomPreference(20.0F)
         //drawCircle(myLocation)
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation,zoom))
-
+        changeLocation(myLocation)
     }
     private fun showStores(latLong:LatLng){
 
@@ -185,6 +188,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     val result = response.body()!!
                     if(result.response.isNotEmpty()){
                         fullAddress = result.response[0].formatter_address
+                        editTxtFullAddress.setText(fullAddress)
                         Log.d("UBICACION GOOGLE MAPS",result.response[0].formatter_address)
                     }
 

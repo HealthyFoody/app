@@ -80,11 +80,21 @@ class LoginFragment : Fragment() {
                     startActivity(mainActivity)
 
                 }else{
+                    if(response.code() == 401){
+                        Toast.makeText(viewGroup.context,"Credenciales inválidas", Toast.LENGTH_LONG).show()
+                    }
                     Log.e("Login",response.toString())
                 }
             }
         })
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        editTextEmail.setText("")
+        editTextPassword.setText("")
+        editTextEmail.requestFocus()
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

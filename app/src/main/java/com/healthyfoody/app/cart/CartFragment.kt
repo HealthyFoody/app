@@ -147,9 +147,12 @@ class CartFragment : Fragment() {
 
                    if(listCartMeals != null){
                        listCartMeals = listCartMeals.sortedBy { it.id }
-                       recyclerView.adapter = CartRecyclerViewAdapter(listCartMeals, listener)
-                       recyclerView.adapter!!.notifyDataSetChanged()
+                   }else{
+                       listCartMeals = listOf()
+
                    }
+                    recyclerView.adapter = CartRecyclerViewAdapter(listCartMeals, listener)
+                    recyclerView.adapter!!.notifyDataSetChanged()
 
                 }else{
                     Log.e("GET CART ERROR",response.toString())
